@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sermon Archive</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <script src="https://unpkg.com/lucide-react"></script> <!-- Include Lucide icons -->
+</head>
+<body>
+    <div class="max-w-7xl mx-auto p-6">
+        <!-- Header Section -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold">Sermon Archive</h1>
+                <div class="flex gap-2">
+                    <div class="flex gap-2">
+                        <button id="gridView" type="button" class="p-2 rounded bg-gray-100" aria-label="Switch to grid view">
+                            <i data-lucide="grid" size="20"></i>
+                            <span class="sr-only">Grid View</span> <!-- Visually hidden text -->
+                        </button>
+                        <button id="listView" type="button" class="p-2 rounded bg-gray-100" aria-label="Switch to list view">
+                            <i data-lucide="list" size="20"></i>
+                            <span class="sr-only">List View</span> <!-- Visually hidden text -->
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Quick Filters -->
+            <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                <div class="flex flex-wrap gap-4 mb-4">
+                    <div class="flex-1 min-w-[300px]">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-3 text-gray-400" size="20"></i>
+                            <input
+                                type="text"
+                                id="searchInput"
+                                placeholder="Search by title, speaker, or content..."
+                                class="w-full pl-10 pr-4 py-2 border rounded-lg"
+                            />
+                        </div>
+                    </div>
+                    <button id="advancedFilterToggle" class="flex items-center gap-2 px-4 py-2 border rounded-lg bg-white hover:bg-gray-50">
+                        <i data-lucide="filter" size="20"></i>
+                        Advanced Filters
+                        <i id="filterIcon" data-lucide="chevron-down" size="16" class="transform transition-transform"></i>
+                    </button>
+                </div>
+
+                <!-- Advanced Filters Panel -->
+                <div id="advancedFilters" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-white rounded-lg">
+                    <div>
+                        <label for="seriesFilter" class="block text-sm font-medium text-gray-700">Series</label>
+                        <select id="seriesFilter" class="px-4 py-2 border rounded-lg">
+                            <option value="All">All Series</option>
+                            <option value="Daniel">Daniel &amp; Revelation</option>
+                            <option value="Sanctuary">Sanctuary Message</option>
+                            <option value="LastDays">Last Day Events</option>
+                        </select>
+                    </div>
+                
+                    <div>
+                        <label for="durationFilter" class="block text-sm font-medium text-gray-700">Duration</label>
+                        <select id="durationFilter" class="px-4 py-2 border rounded-lg">
+                            <option value="All">Duration</option>
+                            <option value="0-30 mins">0-30 mins</option>
+                            <option value="30-60 mins">30-60 mins</option>
+                            <option value="60+ mins">60+ mins</option>
+                        </select>
+                    </div>
+                
+                    <div>
+                        <label for="formatFilter" class="block text-sm font-medium text-gray-700">Format</label>
+                        <select id="formatFilter" class="px-4 py-2 border rounded-lg">
+                            <option value="All">Format</option>
+                            <option value="Audio">Audio</option>
+                            <option value="Video">Video</option>
+                            <option value="Transcript">Transcript</option>
+                        </select>
+                    </div>
+                
+                    <div>
+                        <label for="speakerFilter" class="block text-sm font-medium text-gray-700">Speaker</label>
+                        <select id="speakerFilter" class="px-4 py-2 border rounded-lg">
+                            <option value="All">All Speakers</option>
+                            <option value="Pastor John Smith">Pastor John Smith</option>
+                            <option value="Elder David Johnson">Elder David Johnson</option>
+                            <option value="Dr. Sarah White">Dr. Sarah White</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sermons Grid/List View -->
+        <div id="sermonContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Sermon items will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const sermons = [
+            {
+                id: 1,
+                title: "Understanding the 2300 Days Prophecy",
+                series: "Prophecies of Daniel & Revelation",
+                speaker: "Pastor John Smith",
+                date: "2024-12-28",
+                duration: "45 mins",
+                format: ["Audio", "Video", "Transcript"],
+                categories: ["Prophecy", "Daniel", "Sanctuary"],
+                description: "An in-depth study of Daniel 8:14 and its significance for our time.",
+                resources: ["Audio", "Transcript", "Study Guide", "Slides"],
+                tags: ["End Times", "Prophecy", "Sanctuary"],
+                views: 156,
+                featured: true
+            }
+            // More sermon objects can be added here...
+        ];
+
+        const sermonContainer = document.getElementById('sermonContainer');
+        const searchInput = document.getElementById('searchInput');
+        const advancedFilterToggle = document.getElementById('advancedFilterToggle');
+        const advancedFilters = document.getElementById('advancedFilters');
+        const filterIcon = document.getElementById('filterIcon');
+        const gridViewButton = document.getElementById('gridView');
+        const listViewButton = document.getElementById('listView');
+
+        let view = 'grid'; // Default view
+
+        // Function to render sermons
+        const renderSermons = () => {
+            sermonContainer.innerHTML = ''; // Clear existing sermons
+            const filteredSermons = sermons.filter(sermon => {
+                const matchesSearch = sermon.title.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+                                      sermon.speaker.toLowerCase().includes(searchInput.value.toLowerCase());
+                return matchesSearch; // Add more filtering logic as needed
+            });
+
+            filteredSermons.forEach(sermon => {
+                const sermonDiv = document.createElement('div');
+                sermonDiv.className = `border rounded-lg overflow-hidden hover:shadow-lg transition-shadow ${view === 'list' ? 'p-4' : 'p-6'}`;
+                sermonDiv.innerHTML = `
+                    ${sermon.featured ? '<div class="bg-blue-500 text-white px-4 py-1 text-sm text-center">Featured Sermon</div>' : ''}
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-xl font-semibold">${sermon.title}</h3>
+                        <i data-lucide="bookmark" class="text-gray-400 hover:text-blue-500 cursor-pointer" size="20"></i>
+                    </div>
+                    <div class="space-y-2 text-gray-600 mb-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="user" size="16"></i>
+                            <span>${sermon.speaker}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="calendar" size="16"></i>
+                            <span>${new Date(sermon.date).toLocaleDateString()}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="clock" size="16"></i>
+                            <span>${sermon.duration}</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">${sermon.description}</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        ${sermon.tags.map(tag => `<span class="bg-gray-100 px-2 py-1 rounded text-sm">${tag}</span>`).join('')}
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        ${sermon.resources.map(resource => `
+                            <button class="flex items-center gap-1 px-3 py-1 bg-blue-50 hover:bg-blue-100 rounded-full text-sm text-blue-700">
+                                <i data-lucide="download" size="14"></i>
+                                ${resource}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                sermonContainer.appendChild(sermonDiv);
+            });
+        };
+
+        // Event listeners
+        searchInput.addEventListener('input', renderSermons);
+        advancedFilterToggle.addEventListener('click', () => {
+            advancedFilters.classList.toggle('hidden');
+            filterIcon.classList.toggle('rotate-180');
+        });
+
+        gridViewButton.addEventListener('click', () => {
+            view = 'grid';
+            renderSermons();
+        });
+
+        listViewButton.addEventListener('click', () => {
+            view = 'list';
+            renderSermons();
+        });
+
+        // Initial render
+        renderSermons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grace Church - Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <h1>Grace Church</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="sermons.html">Sermons</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button id="darkModeToggle" class="icon-button" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <a href="login.html" class="login-btn">Login</a>
+            </div>
+            <div class="hamburger" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to Grace Church</h1>
+            <p>Join us in worship every Sunday at 10:00 AM</p>
+            <button class="cta-button" aria-label="Join us today">Join Us Today</button>
+        </div>
+    </section>
+
+    <!-- Announcements Section -->
+    <section class="announcements">
+        <h2>Latest Announcements</h2>
+        <div class="announcement-slider">
+            <div class="announcement-card">
+                <h3>Sunday Service</h3>
+                <p>Join us this Sunday for a special worship service.</p>
+                <span class="date">December 31, 2024</span>
+            </div>
+            <!-- More announcement cards -->
+        </div>
+    </section>
+
+    <!-- Upcoming Events Section -->
+    <section class="events">
+        <h2>Upcoming Events</h2>
+        <div class="event-grid">
+            <div class="event-card">
+                <div class="event-image" aria-label="Event image"></div>
+                <div class="event-details">
+                    <h3>Sunday Service</h3>
+                    <p class="event-date">Every Sunday, 10:00 AM</p>
+                    <p class="event-description">Weekly worship service with praise and teaching.</p>
+                    <button class="event-button" aria-label="Learn more about this event">Learn More</button>
+                </div>
+            </div>
+            <!-- More event cards -->
+        </div>
+    </section>
+
+    <!-- Featured Sermon Section -->
+    <section class="featured-sermon">
+        <h2>Latest Sermon</h2>
+        <div class="sermon-player">
+            <div class="sermon-thumbnail" aria-label="Sermon thumbnail"></div>
+            <div class="sermon-details">
+                <h3>Walking in Faith</h3>
+                <p>Pastor John Doe</p>
+                <div class="sermon-controls">
+                    <button class="play-button" aria-label="Play sermon"><i class="fas fa-play"></i></button>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                    <span class="duration">45:00</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>123 Church Street</p>
+                <p>City, State 12345</p>
+                <p>Phone: (123) 456-7890</p>
+                <p>Email: <a href="mailto:info@gracechurch.com">info@gracechurch.com</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <li><a href="sermons.html">Sermons</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <div class="social-icons">
+                        <div class="social-icons">
+                            <a href="https://www.facebook.com/YourPage" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                            <a href="https://twitter.com/YourPage" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="https://www.instagram.com/YourPage" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://www.youtube.com/YourChannel" target="_blank" rel="noopener noreferrer" aria-label="Subscribe to our YouTube channel">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Grace Church. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

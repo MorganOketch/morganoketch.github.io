@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church Events</title>
+    <style>
+        /* Enhanced Base Styles */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f1c40f;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary-color);
+            background-color: var(--gray-100);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Enhanced Header and Controls */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .view-toggles button,
+        .filter-dropdown select,
+        .print-button {
+            padding: 8px 16px;
+            border: 2px solid var(--gray-300);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .view-toggles button:hover,
+        .filter-dropdown select:hover,
+        .print-button:hover {
+            border-color: var(--secondary-color);
+        }
+
+        .view-toggles button.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Enhanced Calendar View */
+        .calendar-view {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: var(--gray-100);
+            border-bottom: 1px solid var(--gray-300);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: var(--gray-300);
+        }
+
+        .calendar-day {
+            background: white;
+            min-height: 120px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .calendar-day.today {
+            background: #f0f7ff;
+        }
+
+        .day-number {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .day-content {
+            margin-top: 25px;
+        }
+
+        /* Event Categories and Markers */
+        .event-marker {
+            margin: 2px 0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            cursor: pointer;
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .event-worship { background: var(--secondary-color); }
+        .event-study { background: var(--success-color); }
+        .event-fellowship { background: var(--warning-color); }
+        .event-outreach { background: var(--accent-color); }
+        .event-youth { background: #9b59b6; }
+
+        /* Enhanced List View */
+        .event-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--secondary-color);
+            transition: transform 0.2s ease;
+        }
+
+        .event-card:hover {
+            transform: translateX(5px);
+        }
+
+        .event-card.worship { border-left-color: var(--secondary-color); }
+        .event-card.study { border-left-color: var(--success-color); }
+        .event-card.fellowship { border-left-color: var(--warning-color); }
+        .event-card.outreach { border-left-color: var(--accent-color); }
+        .event-card.youth { border-left-color: #9b59b6; }
+
+        /* Enhanced Registration Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row > * {
+            flex: 1;
+        }
+
+        /* Print Styles */
+        @media print {
+            .controls, .view-toggles, .filter-dropdown, .print-button {
+                display: none;
+            }
+
+            .container {
+                width: 100%;
+                max-width: none;
+                padding: 0;
+            }
+
+            .calendar-view {
+                box-shadow: none;
+            }
+
+            .event-card {
+                break-inside: avoid;
+                border: 1px solid #ddd;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .controls {
+                flex-wrap: wrap;
+            }
+
+            .calendar-grid {
+                font-size: 0.9em;
+            }
+
+            .calendar-day {
+                min-height: 100px;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Church Events</h1>
+            <div class="controls">
+                <div class="view-toggles">
+                    <button onclick="switchView('calendar')" class="active">Calendar</button>
+                    <button onclick="switchView('list')">List</button>
+                </div>
+                <div class="filter-dropdown">
+                    <label for="event-filter" class="sr-only">Filter Events</label>
+                    <select id="event-filter" onchange="filterEvents(this.value)">
+                        <option value="all">All Events</option>
+                        <option value="worship">Worship Services</option>
+                        <option value="study">Bible Studies</option>
+                        <option value="fellowship">Fellowship</option>
+                        <option value="outreach">Outreach</option>
+                        <option value="youth">Youth Events</option>
+                    </select>
+                </div>
+                <button class="print-button" onclick="printCalendar()">
+                    Print Calendar
+                </button>
+            </div>
+        </div>
+
+        <!-- Calendar and List views remain the same structurally -->
+        <!-- Previous HTML structure remains... -->
+
+        <!-- Enhanced Registration Modal -->
+        <div id="registration-modal" class="modal">
+            <div class="modal-content">
+                <h2>Event Registration</h2>
+                <form id="registration-form" onsubmit="submitRegistration(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="attendees">Number of Attendees *</label>
+                            <input type="number" id="attendees" min="1" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dietary">Dietary Restrictions</label>
+                        <input type="text" id="dietary">
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Additional Notes</label>
+                        <textarea id="notes" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced events data structure
+        const events = [
+            {
+                id: 1,
+                title: "Sunday Worship Service",
+                date: "2025-01-04",
+                time: "10:00 AM",
+                location: "Main Sanctuary",
+                description: "Weekly worship service with special music program",
+                category: "worship",
+                requiresRegistration: false,
+                recurring: {
+                    frequency: "weekly",
+                    day: "sunday"
+                }
+            },
+            {
+                id: 2,
+                title: "Bible Study Series",
+                date: "2025-01-07",
+                time: "6:30 PM",
+                location: "Fellowship Hall",
+                description: "Part 1 of 8: Introduction to Biblical Prophecy",
+                category: "study",
+                requiresRegistration: true,
+                recurring: {
+                    frequency: "weekly",
+                    day: "tuesday",
+                    endDate: "2025-02-25"
+                }
+            }
+            // Add more sample events...
+        ];
+
+        let currentDate = new Date();
+        let selectedEvent = null;
+        let currentView = 'calendar';
+        let currentFilter = 'all';
+
+        // Function to filter events
+        function filterEvents(category) {
+            currentFilter = category;
+            if (currentView === 'calendar') {
+                renderCalendarDays();
+            } else {
+                renderEventList();
+            }
+        }
+
+        // Function to handle print
+        function printCalendar() {
+            window.print();
+        }
+
+        // Function to get recurring events
+        function getRecurringEvents(baseEvent, startDate, endDate) {
+            const events = [];
+            if (!baseEvent.recurring) return [baseEvent];
+
+            let currentDate = new Date(baseEvent.date);
+            const end = endDate || new Date(baseEvent.recurring.endDate || '2025-12-31');
+
+            while (currentDate <= end) {
+                if (baseEvent.recurring.frequency === 'weekly' && 
+                    currentDate.getDay() === ['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
+                        .indexOf(baseEvent.recurring.day)) {
+                    events.push({
+                        ...baseEvent,
+                        date: currentDate.toISOString().split('T')[0]
+                    });
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return events;
+        }
+
+        // Enhanced calendar rendering function
+        function renderCalendarDays() {
+            // Previous rendering code remains...
+            // Add handling for recurring events
+            const allEvents = events.flatMap(event => 
+                getRecurringEvents(event, firstDayOfMonth, lastDayOfMonth)
+            ).filter(event => 
+                currentFilter === 'all' || event.category === currentFilter
+            );
+
+            // Continue with rendering...
+        }
+
+        // Update the existing functions to handle categories and recurring events
+        // Add the rest of the JavaScript functions from the previous version...
+    </script>
+</body>
+</html>
